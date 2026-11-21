@@ -2585,7 +2585,7 @@ async function ghLer(c) {
     if (rr.ok) { const info = await rr.json(); if (info.default_branch && info.default_branch !== (c.ramo || 'main')) throw new Error(`o ramo "${c.ramo || 'main'}" não existe; o repositório usa "${info.default_branch}"`); }
     return null;
   }
-  if (!r.ok) throw new Error(r.status === 401 ? 'token inválido ou vencido' : r.status === 403 ? 'sem permissão no repositório' : 'GitHub respondeu ' + r.status);
+  if (!r.ok) throw new Error(r.status === 401 ? 'token inválido ou vencido' : r.status === 403 ? 'o token enxerga o repositório, mas não tem a permissão Contents (erro 403). No GitHub, edite o token e dê Contents: Read and write' : 'GitHub respondeu ' + r.status);
   const j = await r.json();
   let txt = j.content ? b64d(j.content) : '';
   if (!txt && j.download_url) txt = await (await fetch(j.download_url, { cache: 'no-store' })).text();
