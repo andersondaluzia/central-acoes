@@ -2,7 +2,10 @@
 <html lang="pt-BR"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PMO · Gestão de Projetos</title>
+<title>Central de Ações</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2453d4">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%234470f4'/%3E%3Cstop offset='1' stop-color='%231c3a9e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Crect x='11' y='14' width='26' height='9' rx='4.5' fill='%23fff'/%3E%3Crect x='19' y='27.5' width='30' height='9' rx='4.5' fill='%23fff' opacity='.75'/%3E%3Crect x='27' y='41' width='15' height='9' rx='4.5' fill='%23fff' opacity='.5'/%3E%3Ccircle cx='50' cy='45.5' r='8.5' fill='%2334d399'/%3E%3Cpath d='M46 45.6l2.8 2.8 5.4-5.6' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -77,6 +80,20 @@ button{cursor:pointer}
 .cfg label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:500}
 .cfg label.full{grid-column:1/-1}
 .cfg input{width:100%;font-size:14px}
+.cap{max-width:640px;display:flex;flex-direction:column;gap:14px}
+.cap textarea{font-size:17px;min-height:110px;padding:12px 14px;border-radius:12px}
+.cap-linha{display:flex;flex-direction:column;gap:6px}
+.cap-linha>span{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.cap-ops{display:flex;gap:8px;flex-wrap:wrap}
+.cap-op{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 14px;font-size:15px;cursor:pointer}
+.cap-op.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.cap-detect{font-size:13px;color:var(--muted);min-height:18px}
+.cap-detect b{color:var(--accent)}
+.cap select,.cap input[type=date]{font-size:15px;padding:9px 10px;border-radius:10px}
+.cap-btns{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.cap-btns .btn{justify-content:center;padding:13px 16px;font-size:16px;border-radius:12px}
+.cap-dica{font-size:12.5px;color:var(--muted)}
+.cap-ult{margin-top:6px}
 .cfg-passos{margin:0;padding:0 16px 16px 36px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
 @media (max-width:760px){.cfg{grid-template-columns:1fr}}
 .side-tools{display:flex;gap:6px}
@@ -497,6 +514,7 @@ h1 .tag-privado{font-size:12px;vertical-align:4px}
     </div>
     <nav class="nav" id="nav">
       <a href="#hoje" data-v="hoje" title="Cobrar hoje"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="lbl">Cobrar hoje</span><span class="count" id="c-hoje"></span></a>
+      <a href="#captura" data-v="captura" title="Captura rápida"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg><span class="lbl">Captura rápida</span><span class="count"></span></a>
       <a href="#caixa" data-v="caixa" title="Caixa de entrada"><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span class="lbl">Caixa de entrada</span><span class="count" id="c-caixa"></span></a>
       <a href="#projetos" data-v="projetos" title="Projetos"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="lbl">Projetos</span><span class="count" id="c-projetos"></span></a>
       <a href="#acoes" data-v="acoes" title="Ações"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 12l3 3 5-6"></path></svg><span class="lbl">Ações</span><span class="count" id="c-acoes"></span></a>
@@ -520,7 +538,8 @@ h1 .tag-privado{font-size:12px;vertical-align:4px}
         <p>Sem sincronização, os dados ficam neste navegador e o botão <b>Salvar no arquivo</b> grava uma cópia dentro do próprio .html.</p>
       </details>
       <div class="versao" title="PMO · Gestão de Projetos
-Versão 2.0.2 de 21/11/2026
+Versão 2.1 de 21/11/2026
+Novo: Captura rápida (ícone no celular, ditado, datas por extenso), compartilhar direto do WhatsApp e "Mandar para o Claude analisar".
 Mensagens de erro da sincronização mais claras (ex.: token sem acesso ao repositório).
 O app não traz dados embutidos: tudo vem do GitHub (dados.json).
 Novo na 2.0: sincronização pelo GitHub (computador da empresa, pessoal e celular), Caixa de entrada para revisar atas e mensagens do WhatsApp,
@@ -528,7 +547,7 @@ Novo na 2.0: sincronização pelo GitHub (computador da empresa, pessoal e celul
 
 Inclui: Caixa de entrada, Pessoal, Cobrar hoje, Projetos (Gantt e lista), Ações com comentários e flag crítica,
 Anotações, Pessoas, Relatório de status, cobrança pelo Teams e importação de reunião.">
-        <span class="lbl">PMO · Gestão de Projetos</span><b>v2.0.2</b><span class="lbl">20/11/2026</span>
+        <span class="lbl">PMO · Gestão de Projetos</span><b>v2.1</b><span class="lbl">20/11/2026</span>
       </div>
     </div>
   </aside>
@@ -2527,7 +2546,7 @@ function csvDaCaixa(c) {
 }
 telas.caixa = () => {
   const todas = (db.caixaEntrada || []).slice().sort((a, b) => (b.recebidoEm || '').localeCompare(a.recebidoEm || ''));
-  const pend = todas.filter(c => c.status === 'pendente'), hist = todas.filter(c => c.status !== 'pendente').slice(0, 20);
+  const pend = todas.filter(c => c.status === 'pendente'), anal = todas.filter(c => c.status === 'analisar'), hist = todas.filter(c => c.status === 'importado' || c.status === 'descartado').slice(0, 20);
   const rotTipo = { ACAO: 'Ação', DECISAO: 'Decisão', RISCO: 'Risco', INFORMACAO: 'Informação', RESUMO: 'Resumo' };
   const card = c => {
     const itens = c.itens || [], nAc = itens.filter(i => i.tipo === 'ACAO').length;
@@ -2556,6 +2575,11 @@ telas.caixa = () => {
   ${!ghOk() ? '<div class="banner"><span><b>Sincronização desligada:</b> a caixa de entrada é preenchida pelo Claude no GitHub. Ligue em Sincronização para receber as atas e mensagens aqui.</span><a class="btn sm" href="#config">Ligar sincronização</a></div>' : ''}
   <div class="card section"><div class="section-head"><h2>Para revisar <span class="count">${pend.length}</span></h2></div>
     ${pend.length ? pend.map(card).join('') : '<div class="empty">Nada para revisar. As atas chegam pelo Gmail e as mensagens do WhatsApp entram assim que você compartilha.</div>'}</div>
+  ${anal.length ? `<div class="card section"><div class="section-head"><h2>Aguardando o Claude analisar <span class="count">${anal.length}</span></h2><span class="muted" style="font-size:12.5px">a tarefa roda a cada 2 horas em dias úteis</span></div>
+    ${anal.map(c => `<div class="cx"><div class="cx-top"><span class="badge ${COR_ORIGEM[c.origem] || 'gray'}">${esc(ORIGENS[c.origem] || '')}</span><span class="cx-assunto">${esc(c.assunto || '')}</span><span class="muted" style="font-size:12px">${c.recebidoEm ? fmtDH(c.recebidoEm) : ''}</span></div>
+      <div class="muted" style="font-size:13px;white-space:pre-wrap">${esc((c.textoBruto || '').slice(0, 280))}${(c.textoBruto || '').length > 280 ? '…' : ''}</div>
+      <div class="cx-acoes"><span class="grow" style="flex:1"></span><button class="btn sm danger" data-act="caixa-descartar" data-id="${c.id}">Descartar</button>
+      <button class="btn sm" data-act="cap-da-caixa" data-id="${c.id}">Virar ação agora</button></div></div>`).join('')}</div>` : ''}
   ${hist.length ? `<div class="card section"><div class="section-head"><h2>Já tratadas <span class="count">${hist.length}</span></h2></div>
     ${hist.map(c => `<div class="item"><div class="d">${c.recebidoEm ? fmt(c.recebidoEm.slice(0, 10)) : ''}</div>
       <div><div class="txt">${esc(c.assunto || '(sem assunto)')}</div><div class="acao-meta"><span class="badge ${COR_ORIGEM[c.origem] || 'gray'}">${esc(ORIGENS[c.origem] || '')}</span>
@@ -2650,7 +2674,7 @@ async function sincronizar(manual) {
       db = novo; dirty = false; bannerArquivo = null; snapReset();
       lsSet(GH_KEY + '-base', JSON.stringify(db)); lsSet(GH_KEY + '-sha', sha || ''); persistirSilencioso();
       sync.estado = 'ok'; sync.erro = ''; sync.em = new Date().toISOString();
-      if (mudou && !formAtual) rota();
+      if (mudou && !formAtual && !(rotaAtual.startsWith('captura') && cap.texto.trim())) rota(); else atualizarEstado();
       if (manual === true) toast('Sincronizado com o GitHub');
       break;
     }
@@ -2688,6 +2712,12 @@ telas.config = () => {
     </div>
   </div>
   <div class="card section">
+    <div class="section-head"><h2>E-mail para mensagens longas</h2></div>
+    <div class="cfg"><label class="full">Seu Gmail (usado pelo botão "Encaminhar por e-mail" da Captura rápida)<input type="text" id="cap-email" value="${esc((db.config && db.config.emailCaptura) || '')}" placeholder="seu.email@gmail.com" autocomplete="off">
+      <small class="help-campo">Fica no dados.json (repositório privado), não no app público.</small></label></div>
+    <div class="toolbar" style="padding:0 16px 16px;margin:0"><button class="btn" data-act="cap-email-salvar">Salvar e-mail</button></div>
+  </div>
+  <div class="card section">
     <div class="section-head"><h2>Como criar o token</h2></div>
     <ol class="cfg-passos">
       <li>No GitHub: foto do perfil → <b>Settings</b> → <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.</li>
@@ -2716,6 +2746,142 @@ function salvarConfigGH() {
   lsSet(GH_KEY, JSON.stringify(c));
   toast('Configuração salva. Sincronizando…'); rota(); sincronizar(true);
 }
+
+// ---------- Captura rápida ----------
+// Tela para o celular: uma frase (digitada ou ditada pelo teclado), Pessoal/Trabalho, prazo e Salvar.
+// Também recebe texto compartilhado pelo WhatsApp (share target do app instalado).
+const CAP_KEY = 'central-acoes-cap';
+const cap = (() => { let a = 'pessoal'; try { a = localStorage.getItem(CAP_KEY) || 'pessoal'; } catch (e) { } return { texto: '', area: a, prazo: 'auto', data: '', projeto: '', resp: '', compart: false }; })();
+const DIAS_EXT = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+const DIAS_CURTOS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const somaDias = (d, n) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; };
+const rotuloData = s => { if (!s) return 'sem data'; const [y, m, d] = s.split('-').map(Number), dt = new Date(y, m - 1, d), df = diffDias(s);
+  return (df === 0 ? 'hoje, ' : df === 1 ? 'amanhã, ' : '') + DIAS_CURTOS[dt.getDay()] + ' ' + String(d).padStart(2, '0') + '/' + String(m).padStart(2, '0') + (y !== new Date().getFullYear() ? '/' + y : ''); };
+// Lê datas escritas por extenso em português. Devolve { data, ini, fim } (posição do trecho no texto) ou null.
+function lerData(txt) {
+  if (!txt) return null;
+  const t = txt.toLowerCase().replace(/[áàâãä]/g, 'a').replace(/[éèêë]/g, 'e').replace(/[íìîï]/g, 'i').replace(/[óòôõö]/g, 'o').replace(/[úùûü]/g, 'u').replace(/ç/g, 'c');
+  const h = new Date(), H = new Date(h.getFullYear(), h.getMonth(), h.getDate());
+  const pre = '(?:(?:ate|para|pra|na|no|nesta|nessa|neste|nesse|proxima|proximo|de|em|dia|o dia)\\s+)*';
+  const regras = [
+    [new RegExp('\\b' + pre + 'depois de amanha\\b'), () => somaDias(H, 2)],
+    [new RegExp('\\b' + pre + 'amanha\\b'), () => somaDias(H, 1)],
+    [new RegExp('\\b' + pre + 'hoje\\b'), () => H],
+    [new RegExp('\\b' + pre + '(\\d{1,2})/(\\d{1,2})(?:/(\\d{2,4}))?\\b'), m => {
+      let y = m[3] ? Number(m[3].length === 2 ? '20' + m[3] : m[3]) : H.getFullYear(); const d = new Date(y, Number(m[2]) - 1, Number(m[1]));
+      if (isNaN(d) || d.getMonth() !== Number(m[2]) - 1) return null; if (!m[3] && d < H) d.setFullYear(y + 1); return d; }],
+    [new RegExp('\\b' + pre + '(?:semana que vem|proxima semana)\\b'), () => somaDias(H, ((8 - H.getDay()) % 7) || 7)],
+    [new RegExp('\\b' + pre + '(?:fim|final) do mes\\b'), () => new Date(H.getFullYear(), H.getMonth() + 1, 0)],
+    [new RegExp('\\b' + pre + '(?:fim|final) de semana\\b'), () => somaDias(H, ((6 - H.getDay()) + 7) % 7)],
+    [/\b(?:em|daqui a)\s+(\d{1,2})\s+dias?\b/, m => somaDias(H, Number(m[1]))],
+    [new RegExp('\\b' + pre + '(segunda|terca|quarta|quinta|sexta|sabado|domingo)(?:-feira| feira)?\\b'), m => {
+      const alvo = DIAS_EXT.indexOf(m[1]); let n = (alvo - H.getDay() + 7) % 7; if (n === 0) n = 7; return somaDias(H, n); }],
+    [new RegExp('\\b' + pre + 'dia (\\d{1,2})\\b'), m => {
+      const dd = Number(m[1]); if (dd < 1 || dd > 31) return null; let d = new Date(H.getFullYear(), H.getMonth(), dd); if (d < H) d = new Date(H.getFullYear(), H.getMonth() + 1, dd); return d; }],
+  ];
+  for (const [re, f] of regras) {
+    const m = t.match(re); if (!m) continue;
+    const d = f(m); if (!d) continue;
+    return { data: iso(d), ini: m.index, fim: m.index + m[0].length };
+  }
+  return null;
+}
+function capPrazo() {
+  const det = lerData(cap.texto), H = new Date(); H.setHours(0, 0, 0, 0);
+  switch (cap.prazo) {
+    case 'hoje': return hoje();
+    case 'amanha': return iso(somaDias(H, 1));
+    case 'semana': { const n = (5 - H.getDay() + 7) % 7; return iso(somaDias(H, H.getDay() === 6 ? 6 : n)); }
+    case 'proxima': return iso(somaDias(H, ((8 - H.getDay()) % 7) || 7));
+    case 'sem': return '';
+    case 'data': return cap.data || '';
+    default: return det ? det.data : '';
+  }
+}
+function capTitulo() {
+  let txt = cap.texto.trim(); const det = cap.prazo === 'auto' ? lerData(txt) : null;
+  let linha = txt.split(/\n/)[0].trim();
+  if (det && det.fim >= linha.replace(/[\s.!,;]+$/, '').length - 1 && det.ini < linha.length) linha = (linha.slice(0, det.ini) + linha.slice(det.fim)).replace(/[\s,;:-]+$/, '').trim();
+  if (linha.length > 160) linha = linha.slice(0, 157).replace(/\s+\S*$/, '') + '…';
+  return linha.charAt(0).toUpperCase() + linha.slice(1);
+}
+telas.captura = modo => {
+  if (modo === 'pessoal' || modo === 'trabalho') { cap.area = modo; cap.projeto = ''; try { history.replaceState(null, '', '#captura'); } catch (e) { } rotaAtual = 'captura'; }
+  const pes = cap.area === 'pessoal';
+  const projs = db.projetos.filter(p => ativo(p) && (pes ? projPessoal(p) : !projPessoal(p))).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const op = (act, v, l, atual) => `<button type="button" class="cap-op${v === atual ? ' on' : ''}" data-act="${act}" data-v="${v}">${l}</button>`;
+  const ult = db.acoes.filter(a => a.capturaEm).sort((a, b) => b.capturaEm.localeCompare(a.capturaEm)).slice(0, 5);
+  const eu = (db.config && db.config.euId) || '';
+  return `<div class="cap">
+  <div><h1 style="margin-bottom:4px">Captura rápida</h1><p class="sub" style="margin:0">Escreva ou dite uma frase. Ex.: “Ligar para a escola do Heitor amanhã”.</p></div>
+  ${cap.compart ? '<div class="banner"><span>📲 Texto recebido pelo compartilhamento. Ajuste se quiser e salve, ou mande para o Claude analisar.</span></div>' : ''}
+  <textarea id="cap-texto" data-cap="texto" placeholder="O que precisa ser feito?" autofocus>${esc(cap.texto)}</textarea>
+  <div class="cap-dica">🎤 Para ditar, toque no microfone do teclado do celular.</div>
+  <div class="cap-linha"><span>Área</span><div class="cap-ops">${op('cap-area', 'pessoal', '🏠 Pessoal', cap.area)}${op('cap-area', 'trabalho', '💼 Trabalho', cap.area)}</div></div>
+  <div class="cap-linha"><span>Prazo</span><div class="cap-ops">
+    ${op('cap-prazo', 'auto', '✨ Pelo texto', cap.prazo)}${op('cap-prazo', 'hoje', 'Hoje', cap.prazo)}${op('cap-prazo', 'amanha', 'Amanhã', cap.prazo)}${op('cap-prazo', 'semana', 'Até sexta', cap.prazo)}${op('cap-prazo', 'proxima', 'Próx. semana', cap.prazo)}${op('cap-prazo', 'sem', 'Sem data', cap.prazo)}${op('cap-prazo', 'data', '📅 Escolher', cap.prazo)}</div>
+    ${cap.prazo === 'data' ? `<input type="date" id="cap-data" data-cap="data" value="${esc(cap.data)}">` : ''}
+    <div class="cap-detect" id="cap-detect">${capRotuloPrazo()}</div></div>
+  <div class="cap-linha"><span>Projeto (opcional)</span><select data-cap="projeto">${opts([['', pes ? '(nenhum)' : '(sem projeto)'], ...projs.map(p => [p.id, (p.codigo ? p.codigo + ' · ' : '') + p.nome])], cap.projeto)}</select></div>
+  ${pes ? '' : `<div class="cap-linha"><span>Responsável</span><select data-cap="resp">${opts(db.pessoas.slice().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')).map(p => [p.id, p.id === eu ? p.nome + ' (você)' : p.nome]), cap.resp || eu)}</select></div>`}
+  <div class="cap-btns">
+    <button class="btn primary" data-act="cap-salvar">Salvar ação</button>
+    <button class="btn" data-act="cap-analisar" title="Para áudios transcritos ou mensagens longas: o Claude extrai as ações e elas aparecem na Caixa de entrada">🤖 Mandar para o Claude analisar</button>
+    <button class="btn" data-act="cap-email" title="Abre o Gmail com a mensagem pronta para o seu endereço">✉️ Encaminhar por e-mail</button>
+    ${cap.texto ? '<button class="btn sm" data-act="cap-limpar" style="align-self:center">Limpar</button>' : ''}
+  </div>
+  ${ult.length ? `<div class="card section cap-ult"><div class="section-head"><h2>Últimas capturadas</h2></div>
+    ${ult.map(a => `<div class="item"><div class="d">${a.lembrete ? fmt(a.lembrete) : '—'}</div><div><div class="txt">${esc(a.item)}</div>
+      <div class="acao-meta">${ehPessoal(a) ? '🏠 Pessoal' : '💼 Trabalho'}${projeto(a.projetoId) ? ' · ' + esc(projeto(a.projetoId).nome) : ''}</div></div>
+      <button class="btn sm" data-act="cap-desfazer" data-id="${a.id}" title="Excluir esta ação">Excluir</button></div>`).join('')}</div>` : ''}
+  <div class="cap-dica">Dica: no celular, toque em ⋮ → <b>Instalar app</b> (ou Adicionar à tela inicial) para ter o ícone da Captura rápida e a opção “Central de Ações” no Compartilhar do WhatsApp.</div>
+  </div>`;
+};
+function capRotuloPrazo() {
+  if (cap.prazo === 'auto') { const d = lerData(cap.texto); return d ? `Entendi o prazo: <b>${esc(rotuloData(d.data))}</b>` : (cap.texto.trim() ? 'Nenhuma data no texto: fica sem prazo.' : ''); }
+  const p = capPrazo(); return p ? `Prazo: <b>${esc(rotuloData(p))}</b>` : (cap.prazo === 'data' ? 'Escolha a data.' : 'Sem prazo.');
+}
+document.addEventListener('input', e => {
+  const k = e.target.dataset && e.target.dataset.cap; if (!k) return;
+  cap[k] = e.target.value; const det = $('#cap-detect'); if (det) det.innerHTML = capRotuloPrazo();
+});
+document.addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.cap; if (k) { cap[k] = e.target.value; const det = $('#cap-detect'); if (det) det.innerHTML = capRotuloPrazo(); } });
+function capOrigem() { return cap.compart ? (cap.area === 'pessoal' ? 'whatsapp-pessoal' : 'whatsapp-profissional') : 'manual'; }
+function capReset() { try { localStorage.setItem(CAP_KEY, cap.area); } catch (e) { } Object.assign(cap, { texto: '', prazo: 'auto', data: '', compart: false }); }
+function capSalvar() {
+  const txt = cap.texto.trim(); if (!txt) { aviso('Escreva ou dite o que precisa ser feito.'); return; }
+  const item = capTitulo(), resto = txt !== item ? txt : '';
+  const eu = (db.config && db.config.euId) || '', pes = cap.area === 'pessoal';
+  const respIds = pes ? (eu ? [eu] : []) : [cap.resp || eu].filter(Boolean);
+  db.acoes.push({ id: uid(), projetoId: cap.projeto || '', item, descricao: resto, status: 'Não Iniciado', lembrete: capPrazo(), responsaveis: respIds,
+    responsavel: respIds.map(i => (pessoa(i) || {}).nome || '').filter(Boolean).join(' / '), critica: '', pessoal: pes ? 'sim' : '', origem: capOrigem(),
+    recorrencia: '', concluidoEm: '', comentarios: [], criadoEm: hoje(), capturaEm: new Date().toISOString(), tema: '', serieId: '', reuniaoId: '' });
+  const p = capPrazo(); capReset(); persistir(); rota(); toast('Ação salva' + (p ? ' · ' + rotuloData(p) : ''));
+}
+function capAnalisar() {
+  const txt = cap.texto.trim(); if (!txt) { aviso('Cole ou dite o texto que o Claude deve analisar.'); return; }
+  db.caixaEntrada = db.caixaEntrada || [];
+  db.caixaEntrada.push({ id: uid(), origem: cap.area === 'pessoal' ? 'whatsapp-pessoal' : 'whatsapp-profissional', recebidoEm: new Date().toISOString(), fonteRef: '',
+    projetoSugeridoId: cap.projeto || '', assunto: capTitulo().slice(0, 90), dataReuniao: hoje(), textoBruto: txt, itens: [], status: 'analisar' });
+  capReset(); persistir(); rota(); toast('Enviado: o Claude analisa na próxima rodada e o resultado aparece na Caixa de entrada');
+}
+function capEmail() {
+  const txt = cap.texto.trim(), para = (db.config && db.config.emailCaptura) || '';
+  if (!para) { aviso('Cadastre o seu Gmail em Sincronização → "E-mail para mensagens longas" para usar este botão.'); return; }
+  const assunto = (cap.area === 'pessoal' ? '[PESSOAL] ' : '[ACAO] ') + (capTitulo() || 'Mensagem do WhatsApp').slice(0, 80);
+  location.href = 'mailto:' + encodeURIComponent(para) + '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(txt);
+  capReset(); setTimeout(rota, 400);
+}
+// Texto compartilhado pelo WhatsApp (o app instalado abre ?title=&text=)
+function lerCompartilhado() {
+  try {
+    const q = new URLSearchParams(location.search), t = [q.get('title'), q.get('text'), q.get('url')].filter(Boolean);
+    const unico = [...new Set(t.map(s => s.trim()))].join('\n').trim();
+    if (unico) { cap.texto = unico; cap.compart = true; cap.prazo = 'auto'; rotaAtual = 'captura'; history.replaceState(null, '', location.pathname + '#captura'); }
+  } catch (e) { }
+}
+window.CentralDebug = { lerData, capTitulo, cap, dados: () => db }; // usado só em testes
+if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('sw.js').catch(() => { }); } catch (e) { } }
 
 // ---------- navegação e eventos ----------
 function atualizarEstado() {
@@ -2833,6 +2999,23 @@ document.addEventListener('click', e => {
       break;
     }
     case 'gh-salvar': salvarConfigGH(); break;
+    case 'cap-email-salvar': db.config = db.config || {}; db.config.emailCaptura = ($('#cap-email').value || '').trim(); persistir(); toast('E-mail salvo'); break;
+    case 'cap-area': cap.area = el.dataset.v; cap.projeto = ''; rota(); break;
+    case 'cap-prazo': cap.prazo = el.dataset.v; rota(); if (cap.prazo === 'data') { const d = $('#cap-data'); if (d) { d.focus(); try { d.showPicker(); } catch (e) { } } } break;
+    case 'cap-salvar': capSalvar(); break;
+    case 'cap-analisar': capAnalisar(); break;
+    case 'cap-email': capEmail(); break;
+    case 'cap-limpar': cap.texto = ''; cap.compart = false; cap.prazo = 'auto'; cap.data = ''; rota(); break;
+    case 'cap-desfazer': {
+      const a = byId('acoes', id); if (!a) break;
+      confirmar(`Excluir "${a.item}"?`, 'Excluir').then(sim => { if (!sim) return; db.acoes = db.acoes.filter(x => x.id !== id); persistir(); rota(); toast('Ação excluída'); });
+      break;
+    }
+    case 'cap-da-caixa': {
+      const c = byId('caixaEntrada', id); if (!c) break;
+      cap.texto = c.textoBruto || c.assunto || ''; cap.area = c.origem === 'whatsapp-pessoal' ? 'pessoal' : 'trabalho'; cap.compart = true; cap.prazo = 'auto';
+      c.status = 'descartado'; c.observacao = 'Virou ação pela Captura rápida'; persistir(); ir('captura'); break;
+    }
     case 'gh-testar': testarGH(); break;
     case 'gh-sair':
       confirmar('Desligar a sincronização neste navegador? Os dados continuam aqui e no GitHub; só o token é apagado deste aparelho.', 'Desligar').then(sim => {
@@ -2964,6 +3147,7 @@ function menuRecolhido(mini) {
 carregar();
 snapReset();
 try { if (localStorage.getItem(KEY + '-menu') === 'mini') menuRecolhido(true); } catch (e) { }
+lerCompartilhado();
 rota();
 if (ghOk()) sincronizar();
 })();
